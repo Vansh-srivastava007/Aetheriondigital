@@ -2,29 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 
-interface TextAnimationProps {
-  text: string;
-}
-
-const TextAnimation: React.FC<TextAnimationProps> = ({ text }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (index < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayText((prev) => prev + text[index]);
-        setIndex(index + 1);
-      }, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [index, text]);
-
-  return <span>{displayText}</span>;
-};
-
 export default function About() {
-  const [isVisible, setIsVisible] = useState(false);
   const [visibleStatCards, setVisibleStatCards] = useState<Set<number>>(new Set());
   const [visibleSkillCards, setVisibleSkillCards] = useState<Set<number>>(new Set());
   const statCardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -47,17 +25,6 @@ export default function About() {
       },
       { threshold: 0.1 }
     );
-
-    // Observe the about section to trigger text visibility
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      const sectionObserver = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      }, { threshold: 0.1 });
-      sectionObserver.observe(aboutSection);
-    }
 
     [...statCardRefs.current, ...skillCardRefs.current].forEach((card) => {
       if (card) observer.observe(card);

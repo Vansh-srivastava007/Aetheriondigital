@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from 'react';
 
 export default function Services() {
-  const [isVisible, setIsVisible] = useState(false);
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 

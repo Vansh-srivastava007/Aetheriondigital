@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Modern Portfolio - Showcase Your Best Work",
   description: "A beautiful, modern portfolio website showcasing projects, services, and expertise with smooth animations and responsive design.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  themeColor: "#0f051a",
 };
 
 export default function RootLayout({

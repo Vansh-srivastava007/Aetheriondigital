@@ -1,25 +1,10 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import Image from 'next/image';
 
 export default function Portfolio() {
-  const [isVisible, setIsVisible] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-      }
-    });
-
-    const element = document.getElementById('portfolio');
-    if (element) observer.observe(element);
-
-    return () => observer.disconnect();
-  }, []);
 
   // Auto-scroll carousel
   useEffect(() => {
