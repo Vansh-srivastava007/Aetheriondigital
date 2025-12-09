@@ -14,23 +14,30 @@ export default function About() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const cardType = entry.target.getAttribute('data-card-type');
-            const cardIndex = parseInt(entry.target.getAttribute('data-index') || '0');
+            const cardIndex = parseInt(entry.target.getAttribute('data-index') || '0', 10);
             if (cardType === 'stat') {
               setVisibleStatCards((prev) => new Set([...prev, cardIndex]));
             } else if (cardType === 'skill') {
               setVisibleSkillCards((prev) => new Set([...prev, cardIndex]));
             }
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '50px' }
     );
 
-    [...statCardRefs.current, ...skillCardRefs.current].forEach((card) => {
+    const cards = [...statCardRefs.current, ...skillCardRefs.current].filter(Boolean);
+    cards.forEach((card) => {
       if (card) observer.observe(card);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      cards.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
+      observer.disconnect();
+    };
   }, []);
 
   const skills = [
@@ -49,6 +56,8 @@ export default function About() {
         muted
         loop
         playsInline
+        preload="none"
+        loading="lazy"
       >
         <source src="/body-bg.webm" type="video/webm" />
       </video>

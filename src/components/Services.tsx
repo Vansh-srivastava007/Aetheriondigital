@@ -11,19 +11,26 @@ export default function Services() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const cardIndex = parseInt(entry.target.getAttribute('data-index') || '0');
+            const cardIndex = parseInt(entry.target.getAttribute('data-index') || '0', 10);
             setVisibleCards((prev) => new Set([...prev, cardIndex]));
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '50px' }
     );
 
-    cardRefs.current.forEach((card) => {
+    const cards = cardRefs.current.filter(Boolean);
+    cards.forEach((card) => {
       if (card) observer.observe(card);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      cards.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
+      observer.disconnect();
+    };
   }, []);
 
   const services = [
@@ -80,6 +87,8 @@ export default function Services() {
         muted
         loop
         playsInline
+        preload="none"
+        loading="lazy"
       >
         <source src="/body-bg.webm" type="video/webm" />
       </video>

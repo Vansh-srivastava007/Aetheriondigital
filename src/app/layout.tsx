@@ -5,21 +5,39 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
-  title: "Modern Portfolio - Showcase Your Best Work",
-  description: "A beautiful, modern portfolio website showcasing projects, services, and expertise with smooth animations and responsive design.",
+  title: "Atherion Digital - Modern Web Development Agency",
+  description: "Atherion Digital is a next-gen web agency building fast, clean, high-performance digital experiences using modern frontend technologies and smart design fundamentals.",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
   },
   themeColor: "#0f051a",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Atherion Digital",
+  },
 };
 
 export default function RootLayout({

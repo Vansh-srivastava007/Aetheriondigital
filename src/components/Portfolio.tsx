@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 
 export default function Portfolio() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -11,17 +12,33 @@ export default function Portfolio() {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const interval = setInterval(() => {
-      setScrollPosition((prev) => {
-        const newPosition = prev + 2;
-        if (container && newPosition > container.scrollWidth - container.clientWidth) {
-          return 0;
-        }
-        return newPosition;
-      });
-    }, 30);
+    let animationFrameId: number;
+    let lastTime = 0;
+    const scrollSpeed = 0.5; // pixels per frame
 
-    return () => clearInterval(interval);
+    const animate = (currentTime: number) => {
+      if (!lastTime) lastTime = currentTime;
+      const deltaTime = currentTime - lastTime;
+      
+      if (deltaTime >= 16) { // ~60fps
+        setScrollPosition((prev) => {
+          const newPosition = prev + scrollSpeed;
+          if (container && newPosition > container.scrollWidth - container.clientWidth) {
+            return 0;
+          }
+          return newPosition;
+        });
+        lastTime = currentTime;
+      }
+      
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   useEffect(() => {
@@ -79,6 +96,8 @@ export default function Portfolio() {
         muted
         loop
         playsInline
+        preload="none"
+        loading="lazy"
       >
         <source src="/body-bg.webm" type="video/webm" />
       </video>
@@ -98,7 +117,6 @@ export default function Portfolio() {
           <div
             ref={scrollContainerRef}
             className="flex gap-6 overflow-x-auto scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden"
-            onMouseEnter={() => setScrollPosition(scrollPosition)}
           >
             {/* Duplicate the projects array to create a seamless infinite loop */}
             {[...projects, ...projects].map((project, idx) => (
@@ -111,7 +129,14 @@ export default function Portfolio() {
               >
                 {/* Cover Image (if provided) */}
                 {project.imageSrc ? (
-                  <img src={project.imageSrc} alt={project.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <Image
+                    src={project.imageSrc}
+                    alt={project.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 384px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
                 ) : (
                   <div className={`absolute inset-0 ${project.image} transition-transform duration-500 group-hover:scale-110`} />
                 )}

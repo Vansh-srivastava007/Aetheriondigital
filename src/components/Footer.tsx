@@ -1,5 +1,6 @@
-
 'use client';
+
+import Image from 'next/image';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -65,7 +66,14 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4 whitespace-nowrap">
-              <img src="/logo.png" alt="Logo" className="w-12 h-12 rounded-lg flex-shrink-0" />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={48}
+                height={48}
+                className="rounded-lg flex-shrink-0"
+                priority
+              />
               <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Atherion Digital</h3>
             </div>
             <p className="text-gray-400">

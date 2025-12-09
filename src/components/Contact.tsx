@@ -40,6 +40,8 @@ export default function Contact() {
         muted
         loop
         playsInline
+        preload="none"
+        loading="lazy"
       >
         <source src="/body-bg.webm" type="video/webm" />
       </video>

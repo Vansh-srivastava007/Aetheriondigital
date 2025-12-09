@@ -23,9 +23,9 @@ export default function Hero() {
         muted
         loop
         playsInline
+        preload="auto"
       >
         <source src="/hero-bg.webm" type="video/webm" />
-        <source src="/hero-bg.mp4" type="video/mp4" />
       </video>
 
       {/* Overlay for better text visibility */}

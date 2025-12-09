@@ -36,6 +36,7 @@ export default function Navbar() {
             width={100}
             height={100}
             className="rounded-full hover:scale-110 transition-transform duration-300 border-2 border-blue-400"
+            priority
           />
           <h3 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Atherion Digital
