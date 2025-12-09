@@ -1,19 +1,28 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function Services() {
   const [isVisible, setIsVisible] = useState(false);
+  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-      }
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const cardIndex = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleCards((prev) => new Set([...prev, cardIndex]));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-    const element = document.getElementById('services');
-    if (element) observer.observe(element);
+    cardRefs.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -87,13 +96,40 @@ export default function Services() {
 
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, idx) => (
+          {services.map((service, idx) => {
+            const isCardVisible = visibleCards.has(idx);
+            const staggerDelay = idx * 150;
+            
+            return (
             <div
               key={service.id}
-              className={`group relative p-8 bg-gray-900 rounded-xl border-2 border-gray-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/20 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{ transitionDelay: `${idx * 100}ms` }}
+              data-index={idx}
+              ref={(el) => {
+                if (el) cardRefs.current[idx] = el;
+              }}
+              className="group relative p-8 bg-gray-900 rounded-xl border-2 border-gray-800 card-3d-hover"
+              style={{
+                opacity: isCardVisible ? 1 : 0,
+                transform: isCardVisible ? 'translateY(0)' : 'translateY(40px)',
+                transition: `opacity 0.6s ease-out ${staggerDelay}ms, transform 0.6s ease-out ${staggerDelay}ms`,
+              }}
+              onMouseMove={(e) => {
+                const card = e.currentTarget;
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `translateY(-10px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                card.style.boxShadow = '0 20px 25px -5px rgba(59, 130, 246, 0.4), 0 10px 10px -5px rgba(59, 130, 246, 0.3), 0 0 50px rgba(59, 130, 246, 0.5), 0 0 80px rgba(147, 51, 234, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                const card = e.currentTarget;
+                card.style.transform = 'translateY(0) perspective(1000px) rotateX(0) rotateY(0)';
+                card.style.boxShadow = '';
+              }}
             >
               {/* Background Gradient */}
               <div
@@ -115,10 +151,27 @@ export default function Services() {
                 </div>
               </div>
 
-              {/* Glow Border on Hover */}
-              <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-blue-500/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none" />
+              {/* Gradient Glow Border Animation */}
+              <div 
+                className="absolute -inset-0.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(147, 51, 234, 0.6), rgba(59, 130, 246, 0.6))',
+                  backgroundSize: '200% 200%',
+                  animation: 'gradientBorderPulse 4s ease-in-out infinite',
+                  filter: 'blur(8px)',
+                }}
+              />
+              <div 
+                className="absolute -inset-0.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(147, 51, 234, 0.4), rgba(59, 130, 246, 0.4))',
+                  backgroundSize: '200% 200%',
+                  animation: 'gradientBorderPulse 4s ease-in-out infinite 0.5s',
+                }}
+              />
             </div>
-          ))}
+          );
+          })}
         </div>
       </div>
     </section>

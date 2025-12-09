@@ -34,13 +34,6 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl space-y-6 animate-fade-in pt-20">
-          {/* Animated Badge */}
-          <div className="inline-block">
-            <span className="px-4 py-2 bg-white/20 text-white rounded-full text-sm font-semibold animate-pulse backdrop-blur-md border border-white/30">
-              Atherion Digital
-            </span>
-          </div>
-
           {/* Main Headline */}
           <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg animate-slide-up leading-tight">
             Crafting Modern Web<br />Experiences That Rise Above

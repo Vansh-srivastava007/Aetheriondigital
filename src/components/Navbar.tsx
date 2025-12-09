@@ -28,18 +28,22 @@ export default function Navbar() {
         isScrolled ? 'bg-white/80 backdrop-blur-md shadow-lg' : 'bg-black/30 backdrop-blur-sm'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={80}
-              height={80}
-              className="rounded-full hover:scale-110 transition-transform duration-300 border-2 border-blue-400"
-            />
-          </div>
+      <div className="flex justify-between items-center h-20">
+        {/* Logo - Left Corner */}
+        <div className="flex items-center gap-3 pl-4 sm:pl-6 lg:pl-8">
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            className="rounded-full hover:scale-110 transition-transform duration-300 border-2 border-blue-400"
+          />
+          <h3 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Atherion Digital
+          </h3>
+        </div>
+        
+        <div className="max-w-7xl mx-auto flex-1 flex justify-end pr-4 sm:pr-6 lg:pr-8">
 
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-8">
@@ -78,28 +82,28 @@ export default function Navbar() {
             />
           </button>
         </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className={`md:hidden pb-4 space-y-2 ${
-            isScrolled ? 'bg-white/50' : 'bg-black/30'
-          }`}>
-            {['hero', 'about', 'services', 'portfolio', 'contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item)}
-                className={`block w-full text-left px-4 py-2 rounded-lg capitalize transition-colors ${
-                  isScrolled 
-                    ? 'text-gray-700 hover:bg-gray-200' 
-                    : 'text-white hover:bg-white/20'
-                }`}
-              >
-                {item === 'hero' ? 'Home' : item === 'portfolio' ? 'Projects' : item}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className={`md:hidden pb-4 space-y-2 absolute top-20 left-0 right-0 ${
+          isScrolled ? 'bg-white/50' : 'bg-black/30'
+        }`}>
+          {['hero', 'about', 'services', 'portfolio', 'contact'].map((item) => (
+            <button
+              key={item}
+              onClick={() => scrollToSection(item)}
+              className={`block w-full text-left px-4 py-2 rounded-lg capitalize transition-colors ${
+                isScrolled 
+                  ? 'text-gray-700 hover:bg-gray-200' 
+                  : 'text-white hover:bg-white/20'
+              }`}
+            >
+              {item === 'hero' ? 'Home' : item === 'portfolio' ? 'Projects' : item}
+            </button>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }
